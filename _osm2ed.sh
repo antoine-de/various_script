@@ -12,5 +12,21 @@ else
     dbname=$(basename $(pwd))
 fi
 
-osm2ed --connection-string="host=localhost user=navitia password=navitia dbname=$dbname" -i $(pwd)/data/osm
+if [ $2 ];
+then
+    osm_file=$2
+else
+    
+    data_dir=$(pwd)/data/osm
+    
+    osm_file=$(ls $data_dir/*pbf)
+    
+    if [ -z $osm_file ];
+    then
+        echo "several osm files, choose"
+        exit 1
+    fi
+fi
+
+osm2ed --connection-string="host=localhost user=navitia password=navitia dbname=$dbname" -i $osm_file
 
